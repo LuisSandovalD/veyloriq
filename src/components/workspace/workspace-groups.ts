@@ -1,0 +1,81 @@
+import {
+  Archive,
+  BarChart3,
+  Bell,
+  Bot,
+  Boxes,
+  Building2,
+  CircleDollarSign,
+  ClipboardCheck,
+  CreditCard,
+  FileArchive,
+  FileSpreadsheet,
+  FileText,
+  Handshake,
+  Package,
+  Settings,
+  ShieldCheck,
+  ShoppingCart,
+  Sparkles,
+  Truck,
+  UserCog,
+  Users,
+  Warehouse,
+} from "lucide-react";
+
+export const groups = [
+  {
+    label: "Principal",
+    items: [
+      ["dashboard", BarChart3],
+      ["tasks", ClipboardCheck],
+      ["notifications", Bell],
+      ["ai", Bot],
+    ],
+  },
+  {
+    label: "Comercial",
+    items: [
+      ["crm", Handshake],
+      ["customers", Users],
+      ["leads", Handshake],
+      ["quotes", FileText],
+      ["orders", ShoppingCart],
+      ["fulfillment", Truck],
+    ],
+  },
+  {
+    label: "Operaciones",
+    items: [
+      ["catalog", Package],
+      ["products", Package],
+      ["suppliers", Truck],
+      ["purchases", Archive],
+      ["warehouses", Warehouse],
+      ["stock", Boxes],
+      ["inventory_control", Boxes],
+    ],
+  },
+  {
+    label: "Control",
+    items: [
+      ["finance_control", CircleDollarSign],
+      ["accounts", CircleDollarSign],
+      ["obligations", BarChart3],
+      ["reports", FileSpreadsheet],
+      ["documents", FileArchive],
+      ["automations", Sparkles],
+      ["audit", Settings],
+    ],
+  },
+  {
+    label: "Administración",
+    items: [
+      ["team", UserCog],
+      ["roles", ShieldCheck],
+      ["organization", Building2],
+      ["security", ShieldCheck],
+      ["billing", CreditCard],
+    ],
+  },
+] as const;
