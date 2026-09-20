@@ -8,17 +8,17 @@ services:
     volumes:
       - VEYLORIQ-postgres:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U VEYLORIQ -d VEYLORIQ"]
+      test: [ "CMD-SHELL", "pg_isready -U VEYLORIQ -d VEYLORIQ" ]
       interval: 5s
       timeout: 3s
       retries: 20
   redis:
     image: redis:7-bookworm
-    command: ["redis-server", "--appendonly", "yes"]
+    command: [ "redis-server", "--appendonly", "yes" ]
     volumes:
       - VEYLORIQ-redis:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: [ "CMD", "redis-cli", "ping" ]
       interval: 5s
       timeout: 3s
       retries: 20
@@ -30,12 +30,12 @@ services:
     environment:
       DATABASE_URL: postgresql://VEYLORIQ:local-development-only@postgres:5432/VEYLORIQ
       REDIS_URL: redis://redis:6379
-    ports: ["3000:3000"]
+    ports: [ "3000:3000" ]
     depends_on:
       postgres: { condition: service_healthy }
       redis: { condition: service_healthy }
     healthcheck:
-      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/health?mode=ready').then(r=>{if(!r.ok)process.exit(1)})"]
+      test: [ "CMD", "node", "-e", "fetch('https://veyloriq.vercel.app/api/health?mode=ready').then(r=>{if(!r.ok)process.exit(1)})" ]
       interval: 15s
       timeout: 5s
       retries: 10

@@ -23,7 +23,7 @@ jobs:
       REDIS_URL: redis://localhost:6379
       SESSION_PEPPER: ci-session-pepper-that-is-longer-than-thirty-two-characters
       TOTP_ENCRYPTION_KEY: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
-      APP_URL: http://localhost:3000
+      APP_URL: https://veyloriq.vercel.app
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
