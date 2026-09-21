@@ -17,7 +17,6 @@ export function Pricing() {
   const [error, setError] = useState(false);
 
   const load = useCallback(async (signal?: AbortSignal) => {
-    setError(false);
     try {
       const response = await fetch("/api/public/plans", { signal, cache: "no-store" });
       const body = await response.json() as { data?: Plan[]; error?: { message?: string } };
@@ -31,8 +30,11 @@ export function Pricing() {
 
   useEffect(() => {
     const controller = new AbortController();
-    void load(controller.signal);
-    return () => controller.abort();
+    const timeout = window.setTimeout(() => void load(controller.signal), 0);
+    return () => {
+      window.clearTimeout(timeout);
+      controller.abort();
+    };
   }, [load]);
 
   if (plans === null) return <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4" aria-busy="true">
@@ -45,7 +47,7 @@ export function Pricing() {
   if (error) return <Alert className="mx-auto max-w-xl">
     <AlertDescription className="flex items-center justify-between gap-4">
       <span>No pudimos cargar los planes en este momento.</span>
-      <button type="button" onClick={() => { setPlans(null); void load() }} className={cn(buttonVariants({ variant: "outline", size: "sm" }), "shrink-0")}><RefreshCw className="size-4" />Reintentar</button>
+      <button type="button" onClick={() => { setPlans(null); setError(false); void load() }} className={cn(buttonVariants({ variant: "outline", size: "sm" }), "shrink-0")}><RefreshCw className="size-4" />Reintentar</button>
     </AlertDescription>
   </Alert>;
 

@@ -16,10 +16,10 @@ VEYLORIQ es un SaaS multi-tenant para CRM, catálogo, compras, inventario, cotiz
 2. Instala con `npm ci`.
 3. Genera el cliente con `npm run db:generate`.
 4. Aplica migraciones con `npm run db:deploy`.
-5. Ejecuta el bootstrap idempotente con `npm run db:seed`. Las credenciales de plataforma son opcionales; si se proporcionan, ambas deben estar presentes y la contraseña debe tener al menos 16 caracteres.
+5. Ejecuta el seed idempotente con `npm run db:seed`. Crea el catálogo base y una organización demostrativa con historial conectado. Define `DEMO_SEED_PASSWORD` para reemplazar la contraseña local predeterminada; en producción es obligatoria.
 6. Inicia web con `npm run dev` y el worker con `npm run worker` en otro proceso.
 
-No se incluyen usuarios demo, contraseñas conocidas ni precios comerciales ficticios. `STARTER`, `BUSINESS` y `ENTERPRISE` permanecen inactivos hasta que plataforma configure valores reales.
+Los usuarios y datos demostrativos están documentados en `prisma/seed/README.md`. No uses la contraseña local predeterminada en un entorno público. Los precios sembrados son valores de demostración editables desde plataforma.
 
 ## Límites de seguridad
 
