@@ -35,7 +35,12 @@ export async function fetchContacts(): Promise<ApiResponse> {
     );
   return {
     data: value.data,
-    context: { organizationName: "", displayName: "", role: "" },
+    context: {
+      organizationName: "",
+      displayName: "",
+      role: "",
+      permissions: [],
+    },
   };
 }
 

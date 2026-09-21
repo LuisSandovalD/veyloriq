@@ -59,6 +59,7 @@ function WorkspaceInner() {
         onSelect={setView}
         organizationName={context?.organizationName}
         role={context?.role}
+        permissions={context?.permissions}
         open={menuOpen}
         onOpenChange={setMenuOpen}
       />

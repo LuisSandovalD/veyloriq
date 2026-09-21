@@ -35,7 +35,12 @@ export type View = Resource | PanelView;
 export type Row = Record<string, unknown>;
 export type ApiResponse = {
   data: unknown;
-  context: { organizationName: string; displayName: string; role: string };
+  context: {
+    organizationName: string;
+    displayName: string;
+    role: string;
+    permissions: string[];
+  };
   pagination?: { page: number; pageSize: number; hasMore: boolean };
 };
 export type Field = {

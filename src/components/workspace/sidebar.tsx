@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { groups } from "./workspace-groups";
 import { metadata } from "./workspace-metadata";
+import { canAccessView } from "./workspace-access";
 import type { View } from "./workspace-types";
 
 export function Sidebar({
@@ -15,6 +16,7 @@ export function Sidebar({
   onSelect,
   organizationName,
   role,
+  permissions,
   open,
   onOpenChange,
 }: {
@@ -22,6 +24,7 @@ export function Sidebar({
   onSelect: (view: View) => void;
   organizationName?: string;
   role?: string;
+  permissions?: readonly string[];
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -29,40 +32,52 @@ export function Sidebar({
     <>
       <ScrollArea className="min-h-0 flex-1">
         <nav className="px-3 py-4" aria-label="Navegación">
-          {groups.map((group) => (
-            <div key={group.label} className="mb-5 last:mb-0">
-              <p className="mb-1.5 px-2.5 text-[10px] font-semibold uppercase tracking-[.14em] text-muted-foreground">
-                {group.label}
-              </p>
+          {groups.map((group) => {
+            const items = group.items.filter(([key]) =>
+              canAccessView(key, permissions),
+            );
+            if (!items.length) return null;
+            return (
+              <div key={group.label} className="mb-5 last:mb-0">
+                <p className="mb-1.5 px-2.5 text-[10px] font-semibold uppercase tracking-[.14em] text-muted-foreground">
+                  {group.label}
+                </p>
 
-              <div className="space-y-0.5">
-                {group.items.map(([key, Icon]) => {
-                  const active = view === key;
+                <div className="space-y-0.5">
+                  {items.map(([key, Icon]) => {
+                    const active = view === key;
 
-                  return (
-                    <Button
-                      key={key}
-                      type="button"
-                      variant="ghost"
-                      onClick={() => {
-                        onSelect(key);
-                        onOpenChange(false);
-                      }}
-                      aria-current={active ? "page" : undefined}
-                      className={`relative h-10 w-full justify-start gap-3 px-2.5 font-normal ${active
-                        ? "bg-accent font-medium text-accent-foreground hover:bg-accent"
-                        : "text-muted-foreground hover:text-foreground"
+                    return (
+                      <Button
+                        key={key}
+                        type="button"
+                        variant="ghost"
+                        onClick={() => {
+                          onSelect(key);
+                          onOpenChange(false);
+                        }}
+                        aria-current={active ? "page" : undefined}
+                        className={`relative h-10 w-full justify-start gap-3 px-2.5 font-normal ${
+                          active
+                            ? "bg-accent font-medium text-accent-foreground hover:bg-accent"
+                            : "text-muted-foreground hover:text-foreground"
                         }`}
-                    >
-                      {active && <span className="absolute left-0 h-5 w-0.5 rounded-full bg-primary" />}
-                      <Icon className={`size-4 ${active ? "text-foreground" : "text-muted-foreground"}`} strokeWidth={1.8} />
-                      <span className="truncate">{metadata[key].title}</span>
-                    </Button>
-                  );
-                })}
+                      >
+                        {active && (
+                          <span className="absolute left-0 h-5 w-0.5 rounded-full bg-primary" />
+                        )}
+                        <Icon
+                          className={`size-4 ${active ? "text-foreground" : "text-muted-foreground"}`}
+                          strokeWidth={1.8}
+                        />
+                        <span className="truncate">{metadata[key].title}</span>
+                      </Button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </nav>
       </ScrollArea>
 
@@ -92,7 +107,10 @@ export function Sidebar({
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent side="left" className="flex w-[280px] max-w-[85vw] flex-col gap-0 p-0 lg:hidden">
+        <SheetContent
+          side="left"
+          className="flex w-[280px] max-w-[85vw] flex-col gap-0 p-0 lg:hidden"
+        >
           <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
 
           <div className="flex h-14 shrink-0 items-center justify-between border-b px-4">
@@ -100,10 +118,18 @@ export function Sidebar({
               <span className="grid size-8 place-items-center rounded-lg bg-primary text-primary-foreground">
                 <Layers3 className="size-4" />
               </span>
-              <span className="text-sm font-semibold tracking-[.14em] text-foreground">VEYLORIQ</span>
+              <span className="text-sm font-semibold tracking-[.14em] text-foreground">
+                VEYLORIQ
+              </span>
             </div>
 
-            <Button type="button" variant="ghost" size="icon" onClick={() => onOpenChange(false)} aria-label="Cerrar menú">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => onOpenChange(false)}
+              aria-label="Cerrar menú"
+            >
               <X className="size-4" />
             </Button>
           </div>
@@ -117,7 +143,9 @@ export function Sidebar({
           <span className="grid size-8 place-items-center rounded-lg bg-primary text-primary-foreground">
             <Layers3 className="size-4" />
           </span>
-          <span className="text-sm font-semibold tracking-[.16em] text-foreground">VEYLORIQ</span>
+          <span className="text-sm font-semibold tracking-[.16em] text-foreground">
+            VEYLORIQ
+          </span>
         </div>
 
         {navigation}

@@ -154,10 +154,10 @@ const automationSchema = z
     actionBody: z.string().trim().max(1000).optional(),
     actionEmail: z.string().email().optional().or(z.literal("")),
     targetResource: z.enum(["task", "lead", "opportunity"]).optional(),
-  targetField: z.string().trim().max(80).optional(),
-  targetValue: z.string().trim().max(200).optional(),
-  active: z.boolean().default(false),
-  maxDepth: z.coerce.number().int().min(1).max(5).default(3),
+    targetField: z.string().trim().max(80).optional(),
+    targetValue: z.string().trim().max(200).optional(),
+    active: z.boolean().default(false),
+    maxDepth: z.coerce.number().int().min(1).max(5).default(3),
   })
   .superRefine((value, context) => {
     if (value.action === "email.send" && !value.actionEmail)
@@ -586,6 +586,7 @@ export async function GET(request: NextRequest) {
           organizationName: context.value.organizationName,
           displayName: context.value.displayName,
           role: context.value.role,
+          permissions: [...context.value.permissions].sort(),
         },
       },
       { headers: { "x-request-id": id, "cache-control": "private, no-store" } },
